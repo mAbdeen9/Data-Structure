@@ -11,12 +11,26 @@ class Node {
 
   addNode(value) {
     const segments = value.split("/");
-    // console.log(segments);
-    // console.log(this.children[0]?.value);
 
-    const newNode = new Node(value, this);
-    this.children.push(newNode);
-    return { node: newNode, index: this.children.length - 1 };
+    if (segments.length === 0) return;
+    if (segments.length === 1) {
+      const newNode = new Node(value, this);
+      this.children.push(newNode);
+      return { node: newNode, index: this.children.length - 1 };
+    }
+
+    const currentNode = this.children.find(
+      (node) => node.value === segments[0]
+    );
+
+    if (currentNode) {
+      currentNode.addNode(segments.slice(1).join("/"));
+    } else {
+      const newNode = new Node(segments[0], this);
+      this.children.push(newNode);
+      newNode.addNode(segments.slice(1).join("/"));
+      return { node: newNode, index: this.children.length - 1 };
+    }
   }
 
   removeNode(index) {
@@ -42,6 +56,6 @@ const fileSystem = new Tree("/");
 fileSystem.add("games");
 fileSystem.add("files");
 
-// fileSystem.add("games/games/g3");
+fileSystem.add("games/war/code.exe");
 
 console.log(fileSystem);
