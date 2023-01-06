@@ -33,8 +33,31 @@ class Node {
     }
   }
 
-  removeNode(index) {
-    this.children.splice(index, 1);
+  removeNode(nodeValue) {
+    const nodeToRemove = this.children.find((node) => node.value === nodeValue);
+    if (nodeToRemove) {
+      nodeToRemove.parent.children = nodeToRemove.parent.children.filter(
+        (node) => node.value !== nodeValue
+      );
+      return;
+    }
+
+    const digging = (childrenArray) => {
+      for (let node of childrenArray) {
+        if (node.value === nodeValue) {
+          node.parent.children = node.parent.children.filter(
+            (node) => node.value !== nodeValue
+          );
+          return;
+        }
+
+        if (node.children.length !== 0) {
+          digging(node.children);
+        }
+      }
+    };
+
+    digging(this.children);
   }
 }
 
@@ -45,6 +68,10 @@ class Tree {
 
   add(value) {
     this.root.addNode(value);
+  }
+
+  remove(nodeValue) {
+    this.root.removeNode(nodeValue);
   }
 }
 
@@ -57,5 +84,6 @@ fileSystem.add("games");
 fileSystem.add("files");
 
 fileSystem.add("games/war/code.exe");
+fileSystem.remove("war");
 
 console.log(fileSystem);
