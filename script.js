@@ -101,8 +101,9 @@ const binaryTreeBlock = () => {
   //
   class Node {
     //
-    constructor(value = null) {
+    constructor(value = null, parent = null) {
       this.value = value;
+      this.parent = parent;
       this.right = null;
       this.left = null;
     }
@@ -115,7 +116,7 @@ const binaryTreeBlock = () => {
           this.left.add(value);
           return;
         }
-        this.left = new Node(value);
+        this.left = new Node(value, this);
         return;
       }
 
@@ -124,7 +125,7 @@ const binaryTreeBlock = () => {
           this.right.add(value);
           return;
         }
-        this.right = new Node(value);
+        this.right = new Node(value, this);
         return;
       }
     }
@@ -181,7 +182,6 @@ const binaryTreeBlock = () => {
   myBinaryTree.add(15);
   myBinaryTree.add(1);
 
-  console.log(myBinaryTree.find(15));
   console.log(myBinaryTree);
 };
 binaryTreeBlock();
