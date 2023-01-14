@@ -130,7 +130,20 @@ const binaryTreeBlock = () => {
       }
     }
 
-    remove(value) {}
+    remove(value) {
+      const nodeToRemove = this.find(value);
+      if (nodeToRemove) {
+        if (nodeToRemove?.parent?.left.value == value) {
+          nodeToRemove.parent.left = null;
+          return;
+        }
+
+        if (nodeToRemove?.parent?.right.value == value) {
+          nodeToRemove.parent.right = null;
+          return;
+        }
+      }
+    }
 
     find(value) {
       if (this.value == value) {
@@ -178,10 +191,75 @@ const binaryTreeBlock = () => {
 
   const myBinaryTree = new BinaryTree(10);
   myBinaryTree.add(5);
+  myBinaryTree.add(7);
+  myBinaryTree.add(3);
   myBinaryTree.add(12);
   myBinaryTree.add(15);
   myBinaryTree.add(1);
+  myBinaryTree.remove(12);
 
   console.log(myBinaryTree);
 };
-binaryTreeBlock();
+// binaryTreeBlock();
+
+const TrieBlock = () => {
+  class TrieNode {
+    constructor() {
+      this.value = null;
+      this.children = Array(26);
+    }
+  }
+
+  class Trie {
+    constructor() {
+      this.root = new TrieNode();
+    }
+
+    insert(key, value) {
+      let node = this.root;
+      for (let i = 0; i < key.length; i++) {
+        const alphabetIndex = key[i].charCodeAt(0) - 97;
+        if (!node.children[alphabetIndex]) {
+          const newNode = new TrieNode();
+          node.children[alphabetIndex] = newNode;
+        }
+        node = node.children[alphabetIndex];
+      }
+      node.value = value;
+    }
+
+    find(key) {
+      let node = this.root;
+
+      for (let i = 0; i < key.length; i++) {
+        const alphabetIndex = key[i].charCodeAt(0) - 97;
+
+        if (!node.children[alphabetIndex]) {
+          return false;
+        }
+        node = node.children[alphabetIndex];
+      }
+
+      return node;
+    }
+
+    delete(key) {
+      const node = this.find(key);
+      if (node) {
+        node.value = null;
+      }
+    }
+  }
+
+  const myTrie = new Trie();
+
+  myTrie.insert("age", 30);
+  myTrie.insert("name", "Mohamed");
+  myTrie.insert("hobby", "gaming");
+
+  console.log(myTrie.find("name"));
+  myTrie.delete("age");
+  console.log(myTrie);
+};
+
+TrieBlock();
